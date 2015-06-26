@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="de_AT">
 <context>
     <name>AboutPage</name>
     <message>
         <source>About</source>
+        <translatorcomment>Über</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>

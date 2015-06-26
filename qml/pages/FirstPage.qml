@@ -95,10 +95,22 @@ Page {
                     id:firstlabel
                     x: Theme.paddingLarge
                     font.family: Theme.fontFamily
-                    text:qsTr(dh0.GetData(index,0)+"\t" + dh0.GetData(index,2))
+                    text:qsTr(dh0.GetData(index,0))
+                    font.pixelSize: Theme.fontSizeSmall
+                    font.bold: false
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
+                Label {
+                    id:firstlabelb
+                    x: Theme.paddingLarge
+                    font.family: Theme.fontFamily
+                    text:qsTr("  " + dh0.GetData(index,2))
                     font.pixelSize: Theme.fontSizeSmall
                     font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.bottom: firstlabel.bottom
+                    anchors.right: parent.right
+                    anchors.rightMargin: 3
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
                 Label {
@@ -126,11 +138,13 @@ Page {
                 Rectangle
                     {
                     id: rect
-                    width: 25
-                    height: 25
-                    color: "white"
-                    anchors.top: secondlabel.top
-                    anchors.left:secondlabel.right
+                    width: 23
+                    height: 23
+                    color: "lightgrey"
+                    anchors.bottom: firstlabelb.bottom
+                    anchors.right:firstlabelb.left
+                    anchors.bottomMargin: 6
+                    radius: 5
                     Image {
                         width: 20
                         height: 20

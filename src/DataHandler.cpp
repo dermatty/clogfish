@@ -90,14 +90,22 @@ QString DataHandler::GetContact(QString cont) {
     query.first();
     QString retstr = query.value(0).toString();
     // if not found, try some things:
-    // 1: if e.g. "+43" --> omot +43 and insert 0 at beginning
+    // 1: if e.g. "+43" --> make "0043"
     if (retstr=="" && cont[0]=='+') {
-        QString cont0 = "0" + cont.mid(3,cont.length()-3);
-        qDebug() << cont0;
+        QString cont0 = "00" + cont.mid(1,cont.length()-1);
+        qDebug() << "Change Nr.:" + cont0;
         query.exec("select c.displayLabel from Contacts c join PhoneNumbers pn on pn.contactId=c.contactId where pn.phoneNumber='"+cont0+"'");
         query.first();
         retstr = query.value(0).toString();
     }
+    // 2: if e.g. +43 3612 ... -> 0 3612
+    if (retstr=="" && cont[0]=='+') {
+            QString cont0 = "0" + cont.mid(3,cont.length()-2);
+            qDebug() << "Change Nr.:" + cont0;
+            query.exec("select c.displayLabel from Contacts c join PhoneNumbers pn on pn.contactId=c.contactId where pn.phoneNumber='"+cont0+"'");
+            query.first();
+            retstr = query.value(0).toString();
+        }
     db.close();
     if (retstr=="")
         return "N/A";
