@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_AT">
+<TS version="2.1" language="de_AT" sourcelanguage="de">
 <context>
     <name>AboutPage</name>
     <message>
+        <location filename="../qml/pages/AboutPage.qml" line="46"/>
         <source>About</source>
-        <translatorcomment>Über</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Über</translation>
     </message>
     <message>
+        <location filename="../qml/pages/AboutPage.qml" line="60"/>
         <source>Clogfish 0.01 alpha 1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16,50 +17,45 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>My Cover</source>
-        <translation type="vanished">Mein Cover</translation>
+        <source>Jolla Call log</source>
+        <translation type="vanished">Jolla Call Log</translation>
     </message>
     <message>
-        <source>Jolla Call log</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qml/cover/CoverPage.qml" line="38"/>
+        <source>Clogfish Call Log</source>
+        <translation>Clogfish Call Log</translation>
     </message>
 </context>
 <context>
     <name>FirstPage</name>
     <message>
-        <source>Show Page 2</source>
-        <translation type="vanished">Zur Seite 2</translation>
+        <location filename="../qml/pages/FirstPage.qml" line="80"/>
+        <source>Today</source>
+        <translation>Heute</translation>
     </message>
     <message>
-        <source>UI Template</source>
-        <translation type="vanished">UI-Vorlage</translation>
+        <location filename="../qml/pages/FirstPage.qml" line="81"/>
+        <source>Yesterday</source>
+        <translation>Gestern</translation>
     </message>
     <message>
-        <source>Hello Sailors</source>
-        <translation type="vanished">Hallo Matrosen</translation>
-    </message>
-    <message>
-        <source>Nested Page</source>
-        <translation type="obsolete">Unterseite</translation>
-    </message>
-    <message>
+        <location filename="../qml/pages/FirstPage.qml" line="94"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Über</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/FirstPage.qml" line="98"/>
+        <source>Sync contacts and calls again</source>
+        <translation>Neu synchronisieren</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/FirstPage.qml" line="109"/>
+        <source>Clogfish Call Log</source>
+        <translation>Clogfish Call Log</translation>
     </message>
     <message>
         <source>Jolla Call log</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SecondPage</name>
-    <message>
-        <source>Nested Page</source>
-        <translation type="vanished">Unterseite</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="vanished">Element</translation>
+        <translation type="vanished">Jolla Call Log</translation>
     </message>
 </context>
 </TS>

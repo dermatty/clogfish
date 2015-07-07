@@ -41,11 +41,10 @@ Page {
         id: dh0
     }
 
-
     function getCallIcon(idx)
     {
 
-        var callstr = dh0.GetData(idx,4)
+        var callstr = dh0.GetData(idx,"direction")
         if (callstr === "missed")
         {
             return "call-missed.png"
@@ -60,6 +59,29 @@ Page {
         }
     }
 
+    function getIconColor(callstr)
+    {
+        if (callstr === "missed")
+        {
+            return "red"
+        }
+        if (callstr === "incoming")
+        {
+            return "green"
+        }
+        return "lightgrey"
+
+    }
+
+    function translateStartDay(startday)
+    {
+
+
+        if (startday === "Today00000") { return qsTr("Today") }
+        if (startday === "Yesterday0") { return qsTr("Yesterday") }
+        return startday
+    }
+
     // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
         pressDelay: 0
@@ -72,6 +94,10 @@ Page {
                 text: qsTr("About")
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
+            MenuItem {
+                text: qsTr("Sync contacts and calls again")
+                onClicked: dh0.ReadCallData()
+            }
         }
 
         SilicaListView {
@@ -80,7 +106,7 @@ Page {
             model: dh0.NoOfEntries()
             anchors.fill: parent
             header: PageHeader {
-                title: qsTr("Jolla Call log")
+                title: qsTr("Clogfish Call Log")
             }
 
             delegate: BackgroundItem {
@@ -92,71 +118,80 @@ Page {
                 }*/
 
                 Label {
-                    id:firstlabel
+                    id:labelcontact
                     x: Theme.paddingLarge
                     font.family: Theme.fontFamily
-                    text:qsTr(dh0.GetData(index,0))
-                    font.pixelSize: Theme.fontSizeSmall
-                    font.bold: false
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-                }
-                Label {
-                    id:firstlabelb
-                    x: Theme.paddingLarge
-                    font.family: Theme.fontFamily
-                    text:qsTr("  " + dh0.GetData(index,2))
+                    text:qsTr("  " + dh0.GetData(index,"contactname"))
                     font.pixelSize: Theme.fontSizeSmall
                     font.bold: true
-                    anchors.bottom: firstlabel.bottom
-                    anchors.right: parent.right
-                    anchors.rightMargin: 3
+                    anchors.left: parent.left
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
-                Label {
-                    id: secondlabel
-                    x: Theme.paddingLarge
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    font.bold: false
-                    text: qsTr("   " +dh0.GetData(index,3)+"  "+dh0.GetData(index,5)+ "   ")
-                    anchors.top: firstlabel.bottom
-                    anchors.left:firstlabel.left
-                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-                }
-                /*Label {
-                    id: thirdlabel
-                    x: Theme.paddingLarge
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    font.bold: true
-                    text: qsTr("  "+dh0.GetQuery(index)+dh0.GetQueryStr(3)+"  ")
-                    anchors.top: secondlabel.top
-                    anchors.left:secondlabel.right
-                    color: getCallColor()
-                }*/
+
                 Rectangle
                     {
-                    id: rect
+                    id: labelrect
                     width: 23
                     height: 23
-                    color: "lightgrey"
-                    anchors.bottom: firstlabelb.bottom
-                    anchors.right:firstlabelb.left
+                    color: getIconColor(dh0.GetData(index,"direction"))
+                    anchors.bottom: labelcontact.bottom
+                    anchors.left:labelcontact.right
                     anchors.bottomMargin: 6
+                    anchors.leftMargin: 5
                     radius: 5
                     Image {
                         width: 20
                         height: 20
-                        anchors.top: rect.top
-                        anchors.left:rect.left
+                        anchors.top: labelrect.top
+                        anchors.left:labelrect.left
                         anchors.margins: 2
                         source: getCallIcon(index)
                     }
                 }
 
+                Label {
+                    id:labelstarttime
+                    x: Theme.paddingLarge
+                    font.family: Theme.fontFamily
+                    text:qsTr(translateStartDay(dh0.GetData(index,"startday")) + "  " + dh0.GetData(index,"startclock"))
+                    font.pixelSize: Theme.fontSizeSmall
+                    font.bold: false
+                    anchors.right: parent.right
+                    anchors.bottom: labelcontact.bottom
+                    anchors.rightMargin: 3
+                    color: delegate.highlightedghted ? Theme.highlightColor : Theme.primaryColor
+                }
+
+                Label {
+                    id: numberlabel
+                    x: Theme.paddingLarge
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    font.bold: false
+                    text: qsTr(dh0.GetData(index,"number"))
+                    anchors.top: labelcontact.bottom
+                    anchors.left:labelcontact.left
+                    anchors.leftMargin: 8
+                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
+
+                Label {
+                    id: durationlabel
+                    x: Theme.paddingLarge
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    font.bold: false
+                    text: qsTr(dh0.GetData(index,"duration"))
+                    anchors.top: labelstarttime.bottom
+                    anchors.right: labelstarttime.right
+                    anchors.rightMargin: 8
+                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
+                }
+
+
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+                    Qt.openUrlExternally("tel:"+dh0.GetData(index,"number"))
+                    //pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
                 }
             }
 

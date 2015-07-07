@@ -17,6 +17,12 @@ CONFIG += sailfishapp
 SOURCES += src/clogfish.cpp \
     src/DataHandler.cpp
 
+lupdate_only {
+    SOURCES += qml/clogfish.qml \
+    qml/cover/CoverPage.qml \
+    qml/pages/FirstPage.qml \
+}
+
 OTHER_FILES += qml/clogfish.qml \
     qml/cover/CoverPage.qml \
     qml/pages/FirstPage.qml \
@@ -36,7 +42,9 @@ CONFIG += sailfishapp_i18n
 # planning to localize your app, remember to comment out the
 # following TRANSLATIONS line. And also do not forget to
 # modify the localized app name in the the .desktop file.
-TRANSLATIONS += translations/clogfish-de.ts
+TRANSLATIONS = translations/clogfish-en.ts \
+               translations/clogfish-de.ts
+
 
 QT +=sql
 

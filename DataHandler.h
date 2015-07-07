@@ -14,6 +14,10 @@ typedef struct {
     QString number;
     QString direction;
     QString duration;
+    QString startdate;
+    bool overlength;
+    QString startday;
+    QString startclock;
 } Tcalldata;
 
 
@@ -24,13 +28,15 @@ public:
     ~DataHandler();
 public slots:
      int NoOfEntries();
-     QString GetData (int nr,int tcdentry);
+     QString GetData (int nr,QString tcdentry);
      int ReadCallData();
+
 private:
+
+     int max(int a, int b);
      std::vector<Tcalldata> callsdb;
-     QString GetContact(QString cont);
+     QString GetContact(QString cont, bool overl0);
      QSqlDatabase db;
-     QString querystr[6];
 /*signals:
     void DHChanged();*/
 };

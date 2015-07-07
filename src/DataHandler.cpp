@@ -2,7 +2,6 @@
 
 DataHandler::DataHandler (QObject *parent){
     db = QSqlDatabase::addDatabase( "QSQLITE" );
-    for(int i=0;i<6;i++) querystr[i]="";
     ReadCallData();
  }
 
@@ -15,21 +14,51 @@ int DataHandler::ReadCallData()
 {
     Tcalldata tcd;
     QString dirstr;
-    QDateTime s0,s1;
+    QString datestr0;
+    QString timestr0;
+    QDateTime s0,s1,s00;
+    QDate dat0, dat1;
 
     db.setDatabaseName("/home/nemo/.local/share/commhistory/commhistory.db");
     if(!db.open())
         return -1;
     QSqlQuery query(db);
-    query.exec("select startTime, endTime, remoteUid, direction,isMissedCall from Events where type=3 order by startTime desc");
-    query.first();
+    query.exec("select startTime, endTime, remoteUid, direction,isMissedCall from Events where type=3 order by startTime desc;");
+    //query.exec("SELECT datetime(startTime, 'unixepoch', 'localtime') as StartTime, datetime(endTime, 'unixepoch', 'localtime') as EndTime, remoteUid as Number, direction FROM Events WHERE type=3 and datetime(startTime, 'unixepoch', 'localtime') >= datetime('now','-30 day') ORDER BY startTime desc;");
+    //query.first();
     int i=0;
-    if (query.isActive()) {
+    s00 = QDateTime::currentDateTime();
+    dat0 = s00.date();
+    callsdb.clear();
 
+    if (query.isActive()) {
+        callsdb.clear();
         while (query.next()) {
             int startTime = query.value(0).toInt();
             s0.setTime_t(startTime);
-            tcd.starttime = s0.toString(Qt::SystemLocaleShortDate);
+            dat1 = s0.date();
+            tcd.overlength = false;
+            if (dat0 == dat1)
+                datestr0 = "Today00000";
+            else if ((s00.date().day() -1 == s0.date().day()) && (s00.date().month() == s0.date().month()) && (s00.date().year() == s0.date().year()))
+                datestr0 = "Yesterday0";
+            else if (s00.date().weekNumber() == s0.date().weekNumber())
+                datestr0 = s0.date().longDayName(s0.date().dayOfWeek());
+            else {
+                datestr0 = s0.date().longDayName(s0.date().dayOfWeek());
+                datestr0 = datestr0.left(3) + " " + s0.date().toString("dd MMM");
+                if (s00.date().year() != s0.date().year()) {
+                    datestr0 = datestr0 + " " + s0.date().toString("yyyy");
+                    tcd.overlength = true;
+                }
+            }
+            timestr0 = QString::number(s0.time().hour()) + ":" + QString("%1").arg(s0.time().minute(),2,'g',-1,'0');
+            //datestr0 = dat0.toString(Qt::SystemLocaleShortDate);
+            qDebug() << timestr0;
+
+            tcd.starttime = datestr0 + " " + timestr0;//s0.toString(Qt::SystemLocaleShortDate);
+            tcd.startday = datestr0;
+            tcd.startclock = timestr0;
             int endTime = query.value(1).toInt();
             s1.setTime_t(endTime);
             tcd.endtime = s1.toString(Qt::SystemLocaleShortDate);
@@ -54,23 +83,22 @@ int DataHandler::ReadCallData()
     }
    db.close();
    for (i=0;i<(int) callsdb.size();i++)
-       callsdb[i].contactname=GetContact(callsdb[i].number);
+       callsdb[i].contactname=GetContact(callsdb[i].number,callsdb[i].overlength);
    return 0;
 }
 
-QString DataHandler::GetData(int entry,int tcdentry) {
-
+QString DataHandler::GetData(int entry,QString tcdentry) {
 
     if (entry>(int) callsdb.size()-1)
         return "";
-    switch(tcdentry) {
-        case 0: return callsdb[entry].starttime; break;
-        case 1: return callsdb[entry].endtime; break;
-        case 2: return callsdb[entry].contactname; break;
-        case 3: return callsdb[entry].number; break;
-        case 4: return callsdb[entry].direction; break;
-        case 5: return callsdb[entry].duration; break;
-    }
+    if (tcdentry == "starttime") return callsdb[entry].starttime;
+    if (tcdentry == "endtime") return callsdb[entry].endtime;
+    if (tcdentry == "contactname") return callsdb[entry].contactname;
+    if (tcdentry == "number") return callsdb[entry].number;
+    if (tcdentry == "direction") return callsdb[entry].direction;
+    if (tcdentry == "duration") return callsdb[entry].duration;
+    if (tcdentry == "startday") return callsdb[entry].startday;
+    if (tcdentry == "startclock") return callsdb[entry].startclock;
     return "";
 }
 
@@ -81,7 +109,11 @@ int DataHandler::NoOfEntries() {
     return (int) callsdb.size();
 }
 
-QString DataHandler::GetContact(QString cont) {
+int DataHandler::max (int a, int b) {
+    return ((a>b) ? a : b);
+}
+
+QString DataHandler::GetContact(QString cont, bool overl0) {
     db.setDatabaseName("/home/nemo/.local/share/system/Contacts/qtcontacts-sqlite/contacts.db");
     if(!db.open())
         return "N/A";
@@ -108,9 +140,9 @@ QString DataHandler::GetContact(QString cont) {
         }
     db.close();
     if (retstr=="")
-        return "N/A";
+        return cont;
     else
-        return retstr;
+        return retstr.left(max(retstr.length(),(overl0) ? 16 : 22));
 }
 
 

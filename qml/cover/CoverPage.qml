@@ -35,7 +35,7 @@ CoverBackground {
     Label {
         id: label
         anchors.centerIn: parent
-        text: qsTr("Jolla Call log")
+        text: qsTr("Clogfish Call Log")
     }
 
     CoverActionList {
