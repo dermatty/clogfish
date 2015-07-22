@@ -84,11 +84,11 @@ Page {
 
     // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
+        anchors.fill:parent
         pressDelay: 0
-        anchors.fill: parent
-        PageHeader {}
-
-        // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
+        PageHeader {
+            title: qsTr("Clogfish Call Log")
+        }
         PullDownMenu {
             MenuItem {
                 text: qsTr("About")
@@ -98,26 +98,24 @@ Page {
                 text: qsTr("Sync contacts and calls again")
                 onClicked: dh0.ReadCallData()
             }
+
         }
+        SilicaFlickable {
+            pressDelay: 0
+            anchors.top: parent.top
+            anchors.topMargin: 140
+            width: parent.width
+            anchors.bottom: parent.bottom
 
-        SilicaListView {
-            id: listView
-            spacing: 0
-            model: dh0.NoOfEntries()
-            anchors.fill: parent
-            header: PageHeader {
-                title: qsTr("Clogfish Call Log")
-            }
+            SilicaListView {
+                id: listView
+                spacing: 0
+                model: dh0.NoOfEntries()
+                anchors.fill: parent
+                delegate: BackgroundItem {
+                    id: delegate
 
-            delegate: BackgroundItem {
-                id: delegate
-                /*Rectangle {
-                    anchors.fill: parent
-                    color: Theme.highlightColor
-                    opacity: 0.1
-                }*/
-
-                Label {
+                    Label {
                     id:labelcontact
                     x: Theme.paddingLarge
                     font.family: Theme.fontFamily
@@ -126,9 +124,9 @@ Page {
                     font.bold: true
                     anchors.left: parent.left
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-                }
+                    }
 
-                Rectangle
+                    Rectangle
                     {
                     id: labelrect
                     width: 23
@@ -147,9 +145,9 @@ Page {
                         anchors.margins: 2
                         source: getCallIcon(index)
                     }
-                }
+                    }
 
-                Label {
+                    Label {
                     id:labelstarttime
                     x: Theme.paddingLarge
                     font.family: Theme.fontFamily
@@ -160,9 +158,9 @@ Page {
                     anchors.bottom: labelcontact.bottom
                     anchors.rightMargin: 3
                     color: delegate.highlightedghted ? Theme.highlightColor : Theme.primaryColor
-                }
+                    }
 
-                Label {
+                    Label {
                     id: numberlabel
                     x: Theme.paddingLarge
                     font.family: Theme.fontFamily
@@ -173,9 +171,9 @@ Page {
                     anchors.left:labelcontact.left
                     anchors.leftMargin: 8
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-                }
+                    }
 
-                Label {
+                    Label {
                     id: durationlabel
                     x: Theme.paddingLarge
                     font.family: Theme.fontFamily
@@ -186,37 +184,17 @@ Page {
                     anchors.right: labelstarttime.right
                     anchors.rightMargin: 8
                     color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-                }
+                    }
 
-
-                onClicked: {
+                    onClicked: {
                     Qt.openUrlExternally("tel:"+dh0.GetData(index,"number"))
                     //pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+                    }
                 }
-            }
 
-            VerticalScrollDecorator {}
+                VerticalScrollDecorator {}
+            }
         }
-
-
-        /*
-        // Tell SilicaFlickable the height of its content.
-        contentHeight: column.height
-
-        // Place our content in a Column.  The PageHeader is always placed at the top
-        // of the page, followed by our content.
-        Column {
-            id: column
-
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("Jolla Detailed Call log")
-            }
-        }*/
-
-
     }
 }
-
 

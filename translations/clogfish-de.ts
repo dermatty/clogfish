@@ -10,7 +10,7 @@
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="60"/>
-        <source>Clogfish 0.01 alpha 1</source>
+        <source>Clogfish 0.01</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -49,7 +49,7 @@
         <translation>Neu synchronisieren</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="109"/>
+        <location filename="../qml/pages/FirstPage.qml" line="90"/>
         <source>Clogfish Call Log</source>
         <translation>Clogfish Call Log</translation>
     </message>

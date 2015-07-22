@@ -51,13 +51,13 @@ Page {
                    anchors.horizontalCenter: parent.horizontalCenter
                    width: 100
                    height: 100
-                   source: "bild.png"
+                   source: "clogfish.png"
                }
                Label {
                    anchors.horizontalCenter: parent.horizontalCenter
                    font.pixelSize: Theme.fontSizeMedium
                    color: Theme.highlightColor
-                   text: qsTr("Clogfish 0.01 alpha 1")
+                   text: qsTr("Clogfish 0.01")
 
                }
         }
